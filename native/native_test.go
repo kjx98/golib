@@ -36,6 +36,18 @@ func TestHostEndian(t *testing.T) {
 		t.Error("hostEndian != nativeEndian")
 	}
 
+	aaf := float32(1.2345)
+	NativeEndian.PutFloat32(ab, aaf)
+	if NativeEndian.Float32(ab) != aaf {
+		t.Error("nativeEndian float32", aaf, ab)
+	}
+
+	aad := float64(123456789.123456)
+	NativeEndian.PutFloat64(ab, aad)
+	if NativeEndian.Float64(ab) != aad {
+		t.Error("nativeEndian float64", aad, ab)
+	}
+
 	a1 := A{One: 1, Two: 2, Three: 3}
 	buf := new(bytes.Buffer)
 	if err:= binary.Write(buf,NativeEndian,a1); err != nil {

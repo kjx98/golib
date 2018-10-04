@@ -67,7 +67,20 @@ func (nativeEndian) Uint32(b []byte) (res uint32) {
 	return
 }
 
+func (nativeEndian) Float32(b []byte) (res float32) {
+	_ = b[3]
+	bp := (* [4]byte)(unsafe.Pointer(&res))
+	copy(bp[:4], b)
+	return
+}
+
 func (nativeEndian) PutUint32(b []byte, v uint32) {
+	_ = b[3]
+	bp := (* [4]byte)(unsafe.Pointer(&v))
+	copy(b, bp[:4])
+}
+
+func (nativeEndian) PutFloat32(b []byte, v float32) {
 	_ = b[3]
 	bp := (* [4]byte)(unsafe.Pointer(&v))
 	copy(b, bp[:4])
@@ -80,7 +93,20 @@ func (nativeEndian) Uint64(b []byte) (res uint64) {
 	return
 }
 
+func (nativeEndian) Float64(b []byte) (res float64) {
+	_ = b[7]
+	bp := (* [8]byte)(unsafe.Pointer(&res))
+	copy(bp[:8], b)
+	return
+}
+
 func (nativeEndian) PutUint64(b []byte, v uint64) {
+	_ = b[7]
+	bp := (* [8]byte)(unsafe.Pointer(&v))
+	copy(b, bp[:8])
+}
+
+func (nativeEndian) PutFloat64(b []byte, v float64) {
 	_ = b[7]
 	bp := (* [8]byte)(unsafe.Pointer(&v))
 	copy(b, bp[:8])
