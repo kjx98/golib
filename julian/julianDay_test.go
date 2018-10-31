@@ -16,7 +16,7 @@ func TestNewJulianDay(t *testing.T) {
     } else if year != 2018 || month != 10 || day != 1 {
 		t.Error("YMD diff 20181001", year, month, day)
     }
-	jdNew := NewJDN(0,1,1)
+	jdNew := newJDN(0,1,1)
 	year, month, day = jdNew.CalcYMD()
 	if year != 0 || month != 1 || day != 1 {
 		t.Error("CalcYMD diff", year, month, day)
@@ -31,13 +31,13 @@ func TestNewJulianDay(t *testing.T) {
 func TestParseJulianDay(t *testing.T) {
 	dateStr := "20181003"
 	jd := ParseJulianDay("YYYYMMDD", dateStr)
-	jdStr := jd.String()
+	jdStr := jd.String8()
 	if dateStr != jdStr {
 		t.Error("Date diff", dateStr, jdStr)
 	}
 	dateStr = "20081101"
 	jd = ParseJulianDay("CCYYMMDD", dateStr)
-	jdStr = jd.String()
+	jdStr = jd.String8()
 	if dateStr != jdStr {
 		t.Error("Date diff", dateStr, jdStr)
 	}
@@ -52,6 +52,14 @@ func BenchmarkParseJulianDay( b *testing.B) {
 	}
 }
 
+func BenchmarkJdOlsStr( b *testing.B) {
+	dateStr := "20181011"
+	jd := ParseJulianDay("YYYYMMDD", dateStr)
+	for i := 0; i< b.N; i++ {
+		_ = jd.String8()
+	}
+}
+
 func BenchmarkJdStr( b *testing.B) {
 	dateStr := "20181011"
 	jd := ParseJulianDay("YYYYMMDD", dateStr)
@@ -62,18 +70,18 @@ func BenchmarkJdStr( b *testing.B) {
 
 func BenchmarkNewJulianDay( b *testing.B) {
 	for i := 0; i< b.N; i++ {
-		_ = NewJulianDay(2018,10,1)
+		_ = newJulianDay(2018,10,1)
 	}
 }
 
 func BenchmarkNewJDN( b *testing.B) {
 	for i := 0; i< b.N; i++ {
-		_ = NewJDN(2018,10,1)
+		_ = newJDN(2018,10,1)
 	}
 }
 
 func BenchmarkGetYMD( b *testing.B) {
-	jd := NewJDN(2018, 10, 4)
+	jd := newJDN(2018, 10, 4)
 	for i := 0; i< b.N; i++ {
 		_,_,_,err := jd.GetYMD()
 		if err != nil { break }
@@ -81,7 +89,7 @@ func BenchmarkGetYMD( b *testing.B) {
 }
 
 func BenchmarkCalcYMD( b *testing.B) {
-	jd := NewJDN(2018, 10, 4)
+	jd := newJDN(2018, 10, 4)
 	for i := 0; i< b.N; i++ {
 		_,_,_ = jd.CalcYMD()
 	}

@@ -3,7 +3,7 @@ package kta
 import (
 	"strconv"
 	"errors"
-	// "fmt"
+	//"fmt"
 )
 
 type JulianDay	uint32
@@ -60,11 +60,15 @@ func  c4ytoj( yr int ) int {
 	return yr*365 +  yr/4 - yr/100 + yr/400
 }
 
-// NewJulianDay
+// newJulianDay
 //	Calc Julian Day with year, month, day
 //       year > 0 for AD
 //		 year<=0, year-1 for BC
 func NewJulianDay(years, months, day int) JulianDay {
+	return newJDN(years, months, day)
+}
+
+func newJulianDay(years, months, day int) JulianDay {
 	res := c4julian(years, months, day)
 	if res < 0 {
 		return JulianDay(res)
@@ -75,11 +79,11 @@ func NewJulianDay(years, months, day int) JulianDay {
 }
 
 
-// NewJDN
+// newJDN
 //	Calc Fast Julian Day with year, month, day
 //       year > 0 for AD
 //		 year<=0, year-1 for BC
-func NewJDN(year, month, day int) JulianDay {
+func newJDN(year, month, day int) JulianDay {
 	res := (1461 * (year + 4800 + (month-14)/12))/4
 	res += (367*(month-2-12*((month-14)/12)))/12
 	res -= (3*((year + 4900 + (month-14)/12)/100))/4
@@ -134,13 +138,6 @@ func ParseJulianDay(pic, date string) (res JulianDay) {
 	months,_ := strconv.Atoi(string(buffer[5:7]))
 	day,_ := strconv.Atoi(string(buffer[8:10]))
 	return NewJulianDay(years, months, day)
-	/*
-	res := c4julian(years, months, day)
-	if res < 0 { return JulianDay(res) }
-	res += c4ytoj(years)
-	res += JULIAN_ADJUSTMENT
-	return JulianDay(res)
-	*/
 }
 
 //	c4mon_dy
@@ -217,7 +214,7 @@ func (jDN JulianDay) CalcYMD() (y, m, d int) {
 }
 
 
-func (julianDay JulianDay) String() string {
+func (julianDay JulianDay) String8() string {
 	if year, month, day, err:= julianDay.GetYMD(); err == nil {
 		res := year*10000 + month*100 + day
 		return strconv.FormatInt(int64(res), 10)
@@ -226,6 +223,20 @@ func (julianDay JulianDay) String() string {
 		return "Invalid JulianDay"
 	}
 	return ""
+}
+
+func (jDN JulianDay) String() string {
+	y, m, d := jDN.CalcYMD()
+	if y >= 0 {
+		res := y * 10000 + m * 100 + d
+		ss := strconv.FormatInt(int64(res), 10)
+		return ss[:4]+"-"+ss[4:6]+"-"+ss[6:]
+	} else {
+		y = -y
+		res := y * 10000 + m * 100 + d
+		ss := strconv.FormatInt(int64(res), 10)
+		return "BC "+ss[:4]+"-"+ss[4:6]+"-"+ss[6:]
+	}
 }
 
 func (jDN JulianDay) Add(v int) JulianDay {
