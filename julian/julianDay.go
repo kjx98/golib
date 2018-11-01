@@ -234,6 +234,15 @@ func FromUint32(days uint32) JulianDay {
 
 
 func (julianDay JulianDay) String8() string {
+	y, m, d := julianDay.CalcYMD()
+	if y >= 0 {
+		res := y*10000 + m*100 + d
+		return strconv.FormatInt(int64(res), 10)
+	}
+	y = -y
+	res := y*10000 + m*100 +d
+	return strconv.FormatInt(int64(-res), 10)
+	/*
 	if year, month, day, err:= julianDay.GetYMD(); err == nil {
 		res := year*10000 + month*100 + day
 		return strconv.FormatInt(int64(res), 10)
@@ -242,6 +251,7 @@ func (julianDay JulianDay) String8() string {
 		return "Invalid JulianDay"
 	}
 	return ""
+	*/
 }
 
 func (jDN JulianDay) String() string {
@@ -256,6 +266,13 @@ func (jDN JulianDay) String() string {
 		ss := strconv.FormatInt(int64(res), 10)
 		return "BC "+ss[:4]+"-"+ss[4:6]+"-"+ss[6:]
 	}
+}
+
+func FromString(buffer string) JulianDay {
+	years,_ := strconv.Atoi(string(buffer[:4]))
+	months,_ := strconv.Atoi(string(buffer[5:7]))
+	day,_ := strconv.Atoi(string(buffer[8:10]))
+	return NewJulianDay(years, months, day)
 }
 
 func (jDN JulianDay) Add(v int) JulianDay {
