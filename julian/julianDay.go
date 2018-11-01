@@ -1,4 +1,4 @@
-package kta
+package julian
 
 import (
 	"strconv"
@@ -211,6 +211,25 @@ func (jDN JulianDay) CalcYMD() (y, m, d int) {
 	m = (h/153 +2) %12 +1
 	y = e/1461 - 4716 + (12+2 -m)/12
 	return
+}
+
+
+func (jDN JulianDay) Uint32() uint32 {
+	y, m, d := jDN.CalcYMD()
+	if y >= 0 {
+		res := y * 10000 + m * 100 + d
+		return uint32(res)
+	}
+	return 0
+}
+
+
+func FromUint32(days uint32) JulianDay {
+	year := int(days / 10000)
+	md := days % 10000
+	mon := int(md / 100)
+	mday := int(md % 100)
+	return newJDN(year, mon, mday)
 }
 
 
