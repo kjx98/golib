@@ -257,15 +257,20 @@ func (julianDay JulianDay) String8() string {
 func (jDN JulianDay) String() string {
 	y, m, d := jDN.CalcYMD()
 	if y >= 0 {
+		return fmt.Sprintf("%04d-%02d-%02d", y, m, d)
+		/*
 		res := y * 10000 + m * 100 + d
 		ss := strconv.FormatInt(int64(res), 10)
 		return ss[:4]+"-"+ss[4:6]+"-"+ss[6:]
-	} else {
-		y = -y
-		res := y * 10000 + m * 100 + d
-		ss := strconv.FormatInt(int64(res), 10)
-		return "BC "+ss[:4]+"-"+ss[4:6]+"-"+ss[6:]
+		*/
 	}
+	y = -y
+	return fmt.Sprintf("BC %04d-%02d-%02d", y, m, d)
+	/*
+	res := y * 10000 + m * 100 + d
+	ss := strconv.FormatInt(int64(res), 10)
+	return "BC "+ss[:4]+"-"+ss[4:6]+"-"+ss[6:]
+	*/
 }
 
 func FromString(buffer string) JulianDay {
