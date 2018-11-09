@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"errors"
 	"fmt"
+	"time"
 )
 
 type JulianDay	uint32
@@ -71,7 +72,7 @@ func NewJulianDay(years, months, day int) JulianDay {
 func newJulianDay(years, months, day int) JulianDay {
 	res := c4julian(years, months, day)
 	if res < 0 {
-		return JulianDay(res)
+		return JulianDay(0)
 	}
 	res += c4ytoj(years)
 	res += JULIAN_ADJUSTMENT
@@ -84,6 +85,9 @@ func newJulianDay(years, months, day int) JulianDay {
 //       year > 0 for AD
 //		 year<=0, year-1 for BC
 func newJDN(year, month, day int) JulianDay {
+	if month < 1 || month > 12 || day < 1 || day > 31 {
+		return JulianDay(0)
+	}
 	res := (1461 * (year + 4800 + (month-14)/12))/4
 	res += (367*(month-2-12*((month-14)/12)))/12
 	res -= (3*((year + 4900 + (month-14)/12)/100))/4
@@ -134,10 +138,14 @@ func ParseJulianDay(pic, date string) (res JulianDay) {
 	}
 	if month_count == 4 { copy(buffer[5:7], []byte("01")) }
 	if day_count == 7 { copy(buffer[8:10], []byte("01")) }
-	years,_ := strconv.Atoi(string(buffer[:4]))
-	months,_ := strconv.Atoi(string(buffer[5:7]))
-	day,_ := strconv.Atoi(string(buffer[8:10]))
-	return NewJulianDay(years, months, day)
+	years,err := strconv.Atoi(string(buffer[:4]))
+	if err != nil { return }
+	months,err := strconv.Atoi(string(buffer[5:7]))
+	if err != nil { return }
+	day,err := strconv.Atoi(string(buffer[8:10]))
+	if err != nil { return }
+	res = NewJulianDay(years, months, day)
+	return
 }
 
 //	c4mon_dy
@@ -213,6 +221,14 @@ func (jDN JulianDay) CalcYMD() (y, m, d int) {
 	return
 }
 
+
+func (jDN JulianDay) GetUTC() time.Time {
+	y, m, d := jDN.CalcYMD()
+	if y >= 0 {
+		return time.Date(y, time.Month(m), d, 0, 0, 0, 0, time.UTC)
+	}
+	return time.Unix(0, 0).UTC()
+}
 
 func (jDN JulianDay) Uint32() uint32 {
 	y, m, d := jDN.CalcYMD()
