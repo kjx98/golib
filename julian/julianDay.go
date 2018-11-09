@@ -3,7 +3,7 @@ package julian
 import (
 	"strconv"
 	"errors"
-	//"fmt"
+	"fmt"
 )
 
 type JulianDay	uint32
