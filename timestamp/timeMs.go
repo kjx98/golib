@@ -35,7 +35,7 @@ func DiffMs(st, en time.Time) (DurationMs,error) {
 // no consider for overflow int64 datetimeMs, about 4.9e5 years
 // Convert DateTimeMs
 func (dtMs DateTimeMs) Time() time.Time {
-	nanoSec := int64(dtMs%1000) * 1000000
+	nanoSec := int64(dtMs % 1000) * 1000000
 	sec := int64(dtMs/1000)
 	return time.Unix(sec, nanoSec)
 }
@@ -46,7 +46,7 @@ func (dtMs DateTimeMs) Unix() int64 {
 }
 
 func (dtMs DateTimeMs) Millisecond() int {
-	return int(dtMs%1000)
+	return int(dtMs % 1000)
 }
 
 // convert time.Time to DateTimeMs

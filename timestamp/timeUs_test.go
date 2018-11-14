@@ -32,3 +32,10 @@ func BenchmarkDurationUs( b *testing.B) {
 		_ = DiffUs(t1, t2)
 	}
 }
+
+func BenchmarkDateTimeUs( b *testing.B) {
+	t1 := time.Now()
+	for i := 0; i< b.N; i++ {
+		_ = ToDateTimeUs(t1)
+	}
+}

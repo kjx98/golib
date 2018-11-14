@@ -38,3 +38,10 @@ func BenchmarkDurationMs( b *testing.B) {
 		}
 	}
 }
+
+func BenchmarkDateTimeMs( b *testing.B) {
+	t1 := time.Now()
+	for i := 0; i< b.N; i++ {
+		_ = ToDateTimeMs(t1)
+	}
+}
