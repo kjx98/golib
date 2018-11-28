@@ -21,6 +21,12 @@ func (deltaUs DurationUs) Time(baseTime time.Time) time.Time {
 	return time.Unix(baseTime.Unix()+deltaSec, ns)
 }
 
+
+// calc seconds of DurationUs
+func (deltaUs DurationUs) Seconds() float64 {
+	return float64(deltaUs)*0.000001
+}
+
 // no consider overflow
 func DiffUs(st, en time.Time) DurationUs {
 	diffNs := en.Nanosecond() - st.Nanosecond()

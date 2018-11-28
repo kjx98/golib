@@ -17,6 +17,12 @@ func (deltaMs DurationMs) Time(baseTime int64) time.Time {
 	return time.Unix(baseTime+deltaSec, ms*1000000)
 }
 
+// calc seconds of DurationMs
+func (deltaMs DurationMs) Seconds() float64 {
+	return float64(deltaMs)*0.001
+}
+
+// calc ms duration
 func DiffMs(st, en time.Time) (DurationMs,error) {
 	diffNs := en.Nanosecond() - st.Nanosecond()
 	diffSec := en.Unix() - st.Unix()
