@@ -4,47 +4,44 @@ import (
 	"time"
 )
 
-type DurationUs	int64
-
-type DateTimeUs	int64
-
+type DurationUs int64
+type DateTimeUs int64
 
 // calc time.Time from baseTime plus DurationMs
 func (deltaUs DurationUs) Time(baseTime time.Time) time.Time {
-	deltaSec := int64(deltaUs/1000000)
-	ns := int64(deltaUs%1000000) * 1000
+	deltaSec := int64(deltaUs / 1e6)
+	ns := int64(deltaUs%1e6) * 1000
 	ns += int64(baseTime.Nanosecond())
-	if ns >= 1000000000 {
-		ns -= 1000000000
+	if ns >= 1e9 {
+		ns -= 1e9
 		deltaSec++
 	}
 	return time.Unix(baseTime.Unix()+deltaSec, ns)
 }
 
-
 // calc seconds of DurationUs
 func (deltaUs DurationUs) Seconds() float64 {
-	return float64(deltaUs)*0.000001
+	return float64(deltaUs) * 0.000001
 }
 
 // no consider overflow
 func DiffUs(st, en time.Time) DurationUs {
-	diffNs := en.Nanosecond() - st.Nanosecond()
+	diffUs := (en.Nanosecond() - st.Nanosecond()) / 1000
 	diffSec := en.Unix() - st.Unix()
-	if diffNs < 0 {
+	if diffUs < 0 {
 		diffSec--
-		diffNs += 1000000000
+		diffUs += 1e6
 	}
-	diffNs /= 1000
-	diffSec *= 1000000
-	return DurationUs(diffSec+int64(diffNs))
+	diffSec *= 1e6
+	return DurationUs(diffSec + int64(diffUs))
 }
 
 // no consider for overflow int64 datetimeMs, about 4.9e5 years
 // Convert DateTimeMs
 func (dtUs DateTimeUs) Time() time.Time {
 	nanoSec := dtUs & 0xfffff
-	return time.Unix(int64(dtUs >> 20), int64(nanoSec))
+	sec := dtUs >> 20
+	return time.Unix(int64(sec), int64(nanoSec))
 }
 
 // return seconds from 1970/1/1 UTC
@@ -60,5 +57,5 @@ func (dtUs DateTimeUs) Usecond() int {
 func ToDateTimeUs(dt time.Time) DateTimeUs {
 	sec := dt.Unix() << 20
 	us := dt.Nanosecond() / 1000
-	return DateTimeUs(sec | int64(us & 0xfffff))
+	return DateTimeUs(sec + int64(us&0xfffff))
 }

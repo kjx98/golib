@@ -1,7 +1,7 @@
 package timestamp
 
 import (
-    "testing"
+	"testing"
 	"time"
 )
 
@@ -13,10 +13,10 @@ func TestDurationMs(t *testing.T) {
 	n2 := min2.Time(n1.Unix())
 	dms, err := DiffMs(n1, n2)
 	if err != nil {
-        t.Error(err)
-    } else if min2 != dms {
+		t.Error(err)
+	} else if min2 != dms {
 		t.Error("DiffMs diff", n1.Unix(), n2.Unix(), int32(dms))
-    }
+	}
 	t.Log("Now & plus 2min", n1, n2)
 }
 
@@ -28,20 +28,21 @@ func TestDateTimeMs(t *testing.T) {
 	}
 }
 
-func BenchmarkDurationMs( b *testing.B) {
+func BenchmarkDurationMs(b *testing.B) {
 	t1 := time.Now()
-	t2 := time.Unix(t1.Unix()-1000, 0) 
-	for i := 0; i< b.N; i++ {
-		_,err := DiffMs(t1, t2)
+	t2 := time.Unix(t1.Unix()-1000, 0)
+	for i := 0; i < b.N; i++ {
+		_, err := DiffMs(t1, t2)
 		if err != nil {
 			b.Fatal(err)
 		}
 	}
 }
 
-func BenchmarkDateTimeMs( b *testing.B) {
+func BenchmarkDateTimeMs(b *testing.B) {
 	t1 := time.Now()
-	for i := 0; i< b.N; i++ {
-		_ = ToDateTimeMs(t1)
+	for i := 0; i < b.N; i++ {
+		ms := ToDateTimeMs(t1)
+		_ = ms.Time()
 	}
 }
