@@ -37,6 +37,8 @@ func DiffMs(st, en time.Time) (DurationMs, error) {
 
 // no consider for overflow int64 datetimeMs, about 4.9e5 years
 // Convert DateTimeMs
+// returns the local Time corresponding to the given Unix time, sec
+//   seconds and nsec nanoseconds since January 1, 1970 UTC.
 func (dtMs DateTimeMs) Time() time.Time {
 	sec := int64(dtMs / 1000)
 	ns := int64(dtMs%1000) * 1e6
