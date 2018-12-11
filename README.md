@@ -1,6 +1,6 @@
 # golib
-[![Build Status](https://api.travis-ci.org/kjx98/golib.svg?branch=master)](
-https://api.travis-ci.org/kjx98/golib)
+[![Build Status](https://travis-ci.org/kjx98/golib.svg?branch=master)](
+https://travis-ci.org/kjx98/golib)
 
 Packages for GO lib
 
