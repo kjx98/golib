@@ -14,4 +14,5 @@ Visit the docs on [gopkgdoc] ini (http://godoc.org/github.com/kjx98/golib/ini)
 native (http://godoc.org/github.com/kjx98/golib/native)
 julian (http://godoc.org/github.com/kjx98/golib/julian)
 timestamp (http://godoc.org/github.com/kjx98/golib/timestamp)
+avl Tree(http://godoc.org/github.com/kjx98/golib/avl)
 
