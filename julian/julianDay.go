@@ -100,6 +100,8 @@ func newJDN(year, month, day int) JulianDay {
 
 //	ParseJulianDay
 //	Converts from formatted Date Data long julian Date format
+//		format like "CCYYMMDD", "CCYY-MM-DD"
+//			C for century, Y for year, M month, D day
 func ParseJulianDay(pic, date string) (res JulianDay) {
 	if date == "" {
 		return
@@ -255,6 +257,7 @@ func (jDN JulianDay) Date() (y, m, d int) {
 	return
 }
 
+// return UTC time.Time
 func (jDN JulianDay) UTC() time.Time {
 	y, m, d := jDN.Date()
 	if y >= 0 {
@@ -263,6 +266,7 @@ func (jDN JulianDay) UTC() time.Time {
 	return time.Unix(0, 0).UTC()
 }
 
+// return YYYYMMDD base 10 uint32
 func (jDN JulianDay) Uint32() uint32 {
 	y, m, d := jDN.Date()
 	if y >= 0 {
@@ -272,6 +276,7 @@ func (jDN JulianDay) Uint32() uint32 {
 	return 0
 }
 
+// convert base 10 uint32 YYYYMMDD to julianDay
 func FromUint32(days uint32) JulianDay {
 	year := int(days / 10000)
 	md := days % 10000
@@ -280,6 +285,7 @@ func FromUint32(days uint32) JulianDay {
 	return newJDN(year, mon, mday)
 }
 
+// return "YYYYMMDD" string
 func (julianDay JulianDay) String8() string {
 	y, m, d := julianDay.Date()
 	if y >= 0 {
@@ -320,6 +326,7 @@ func (jDN JulianDay) String() string {
 	*/
 }
 
+// FormatFrom "YYYY-MM-DD" to julianDay
 func FromString(buffer string) JulianDay {
 	years, _ := strconv.Atoi(string(buffer[:4]))
 	months, _ := strconv.Atoi(string(buffer[5:7]))
@@ -327,10 +334,26 @@ func FromString(buffer string) JulianDay {
 	return NewJulianDay(years, months, day)
 }
 
-func (jDN JulianDay) Add(v int) JulianDay {
-	return JulianDay(int(jDN) + v)
+// forward nDays
+func (jDN JulianDay) Add(nDays int) JulianDay {
+	return JulianDay(int(jDN) + nDays)
 }
+
 
 func (jDN JulianDay) Sub(j JulianDay) int {
 	return int(jDN) - int(j)
+}
+
+// return Weekday time.Weekday
+func (jDN JulianDay) Weekday() time.Weekday {
+	res := uint32(jDN) + 1
+	res %= 7
+	return time.Weekday(res)
+}
+
+// return weekBase sunday julianDay
+func (jDN JulianDay) Weekbase() JulianDay {
+	res := uint32(jDN)+1
+	res %= 7
+	return JulianDay(uint32(jDN)-res)
 }

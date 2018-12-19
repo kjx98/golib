@@ -16,6 +16,10 @@ func TestNewJulianDay(t *testing.T) {
 	} else if year != 2018 || month != 10 || day != 1 {
 		t.Error("YMD diff 20181001", year, month, day)
 	}
+	year, month, day = jd.Weekbase().Date()
+	if year != 2018 || month != 9 || day != 30 {
+		t.Error("Weekbase of 2018/10/1 should be 2018/9/30")
+	}
 	jdNew := newJDN(0, 1, 1)
 	year, month, day = jdNew.Date()
 	if year != 0 || month != 1 || day != 1 {
@@ -42,7 +46,8 @@ func TestParseJulianDay(t *testing.T) {
 		t.Error("Date diff", dateStr, jdStr)
 	}
 	jd = ParseJulianDay("YYYYMMDD", time.Now().Format("20060102"))
-	fmt.Printf("Today's %s JulianDate %d weekday: %d\n", jd, int(jd), int(jd)%7)
+	fmt.Printf("Today's %s JulianDate %d weekday: %v\n", jd, int(jd), jd.Weekday())
+	fmt.Printf("Today's Weekbase is: %v\n", jd.Weekbase())
 }
 
 func BenchmarkParseJulianDay(b *testing.B) {
