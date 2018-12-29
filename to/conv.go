@@ -61,3 +61,19 @@ func Uint64(v interface{}) uint64 {
 	}
 	return 0
 }
+
+func Double(v interface{}) float64 {
+	switch v.(type) {
+	case int8, int16, int32, int, int64:
+		return float64(reflect.ValueOf(v).Int())
+	case uint8, uint16, uint32, uint, uint64:
+		return float64(reflect.ValueOf(v).Uint())
+	case float32, float64:
+		return reflect.ValueOf(v).Float()
+	case string:
+		ss := reflect.ValueOf(v).String()
+		res, _ := strconv.ParseFloat(ss, 64)
+		return res
+	}
+	return 0
+}
