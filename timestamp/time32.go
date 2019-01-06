@@ -51,3 +51,9 @@ func (t1 TimeHM) Add(t2 TimeHM) TimeHM {
 	}
 	return res
 }
+
+func (t1 TimeHM) Second() int {
+	res := int(t1 % 100)
+	res += int(t1/100) * 60
+	return res * 60
+}

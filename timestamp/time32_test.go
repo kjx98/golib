@@ -31,4 +31,10 @@ func TestTimeHM(t *testing.T) {
 	if t1.Add(-t2) != TimeHM(755) {
 		t.Error("TimeHM add diff", t1, -t2, t1.Add(-t2))
 	}
+	if t1.Second() != 555*60 {
+		t.Error("TimeHM second diff", t1, t1.Second())
+	}
+	if t2.Second() != 80*60 {
+		t.Error("TimeHM second diff", t2, t2.Second())
+	}
 }
