@@ -5,7 +5,7 @@
 
 A generic Go AVL tree implementation, derived from [Eric Biggers' C code][1],
 in the spirt of [the runtime library's containers][2].
-Replace cmpFunc with Itemer interface, slower 10% than cmpFunc
+Replace cmpFunc with Itemer interface, slower about 15% than cmpFunc
 
 Features:
 
