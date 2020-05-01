@@ -1,6 +1,7 @@
 package to
 
 import (
+	"math"
 	"testing"
 )
 
@@ -20,7 +21,8 @@ func TestString(t *testing.T) {
 		{"tString4", args{1.12345678901234512345}, "1.123456789012345"},
 		{"tString5", args{123}, "123"},
 		{"tString6", args{"Hello World"}, "Hello World"},
-		{"tString5", args{123456789012345}, "123456789012345"},
+		{"tString7", args{123456789012345}, "123456789012345"},
+		{"tString8", args{math.NaN()}, "NaN"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -95,6 +97,33 @@ func TestUint64(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := Uint64(tt.args.v); got != tt.want {
 				t.Errorf("Uint64() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDouble(t *testing.T) {
+	type args struct {
+		v interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+		want float64
+	}{
+		// TODO: Add test cases.
+		{"tDouble", args{12345.76}, 12345.76},
+		{"tDouble2", args{"12345"}, 12345},
+		{"tDouble3", args{-12345.76}, -12345.76},
+		{"tDouble4", args{nil}, math.NaN()},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := Double(tt.args.v); got != tt.want {
+				if math.IsNaN(tt.want) && math.IsNaN(got) {
+					return
+				}
+				t.Errorf("Double() = %v, want %v", got, tt.want)
 			}
 		})
 	}

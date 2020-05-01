@@ -1,6 +1,7 @@
 package to
 
 import (
+	"math"
 	"reflect"
 	"strconv"
 )
@@ -74,6 +75,8 @@ func Double(v interface{}) float64 {
 		ss := reflect.ValueOf(v).String()
 		res, _ := strconv.ParseFloat(ss, 64)
 		return res
+	case nil:
+		return math.NaN()
 	}
 	return 0
 }
