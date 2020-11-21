@@ -22,3 +22,4 @@ timestamp (http://godoc.org/github.com/kjx98/golib/timestamp)
 
 avl Tree(http://godoc.org/github.com/kjx98/golib/avl)
 
+gbk GBK/UTF8 converter (http://godoc.org/github.com/kjx98/golib/gbk)
