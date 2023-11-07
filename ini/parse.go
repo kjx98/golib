@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-//将数据写入到文件, 无法保证配置的顺序
+// 将数据写入到文件, 无法保证配置的顺序
 func SaveConfigToFile(cf *IniConfig, filename string) bool {
 	fp, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE, 0755)
 	if err != nil {
@@ -28,17 +28,22 @@ func SaveConfigToFile(cf *IniConfig, filename string) bool {
 	return true
 }
 
-//解析config
+// 解析config
 func ParserConfig(filename string, reload bool) (*IniConfig, error) {
 	if !reload {
 		if cf, ok := configList[filename]; ok {
 			return cf, nil
 		}
 	}
-	return parserFile(filename)
+	if acf, err := parserFile(filename); err == nil {
+		configList[filename] = acf
+		return acf, err
+	} else {
+		return nil, err
+	}
 }
 
-//真正的解析config的文件
+// 真正的解析config的文件
 func parserFile(filename string) (*IniConfig, error) {
 
 	acf, err := NewIniConfig()

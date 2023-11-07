@@ -28,7 +28,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/kjx98/goini"
+	"github.com/kjx98/golib/ini"
 )
 
 func main() {
